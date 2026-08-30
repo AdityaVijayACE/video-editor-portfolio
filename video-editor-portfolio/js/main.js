@@ -507,6 +507,63 @@ function initProjectPage() {
   }
 }
 
+
+const contactForm = document.getElementById("contact-form");
+
+if (contactForm) {
+  contactForm.addEventListener("submit", async function (e) {
+    e.preventDefault();
+
+    const submitButton = contactForm.querySelector(".form-submit");
+    const originalButtonHTML = submitButton.innerHTML;
+
+    submitButton.disabled = true;
+    submitButton.textContent = "Sending...";
+
+    const formData = {
+      name: document.getElementById("name").value,
+      email: document.getElementById("email").value,
+      company: document.getElementById("company").value,
+      projectType: document.getElementById("project-type").value,
+      subject: document.getElementById("subject").value,
+      message: document.getElementById("message").value
+    };
+
+    try {
+      const response = await fetch(
+        "https://script.google.com/macros/s/AKfycbyzXQ30ILWQ3OeDxjfl-aub7rOnk0yaQufdPB0J75C40HPpbeSG84oEb22HgZaqo4ig/exec",
+        {
+          method: "POST",
+          mode: "no-cors",
+          headers: {
+            "Content-Type": "text/plain;charset=utf-8"
+          },
+          body: JSON.stringify(formData)
+        }
+      );
+
+      contactForm.reset();
+
+      submitButton.innerHTML = "Message Sent ✓";
+
+      setTimeout(() => {
+        submitButton.innerHTML = originalButtonHTML;
+        submitButton.disabled = false;
+      }, 3000);
+
+    } catch (error) {
+      console.error("Form submission error:", error);
+
+      submitButton.innerHTML = "Failed to Send";
+
+      setTimeout(() => {
+        submitButton.innerHTML = originalButtonHTML;
+        submitButton.disabled = false;
+      }, 3000);
+    }
+  });
+}
+
 /* ========================================
    CONSOLE WELCOME MESSAGE
    ======================================== */
