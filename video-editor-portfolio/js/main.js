@@ -231,62 +231,6 @@ function initSmoothScroll() {
    FORM VALIDATION
    ======================================== */
 
-function initFormValidation() {
-  const form = document.querySelector('.contact-form');
-
-  if (!form) return;
-
-  form.addEventListener('submit', (e) => {
-    e.preventDefault();
-
-    // Get form fields
-    const name = form.querySelector('#name');
-    const email = form.querySelector('#email');
-    const subject = form.querySelector('#subject');
-    const message = form.querySelector('#message');
-
-    let isValid = true;
-
-    // Simple validation
-    if (!name.value.trim()) {
-      showError(name, 'Please enter your name');
-      isValid = false;
-    } else {
-      clearError(name);
-    }
-
-    if (!email.value.trim() || !isValidEmail(email.value)) {
-      showError(email, 'Please enter a valid email');
-      isValid = false;
-    } else {
-      clearError(email);
-    }
-
-    if (!message.value.trim()) {
-      showError(message, 'Please enter your message');
-      isValid = false;
-    } else {
-      clearError(message);
-    }
-
-    if (isValid) {
-      // Show success message
-      const submitBtn = form.querySelector('.form-submit');
-      const originalText = submitBtn.textContent;
-      submitBtn.textContent = 'Sending...';
-      submitBtn.disabled = true;
-
-      // Simulate form submission (replace with actual form handling)
-      setTimeout(() => {
-        showSuccessMessage(form);
-        form.reset();
-        submitBtn.textContent = originalText;
-        submitBtn.disabled = false;
-      }, 1500);
-    }
-  });
-}
-
 function isValidEmail(email) {
   const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   return re.test(email);
