@@ -117,12 +117,19 @@
         <p>Prefer to talk? Schedule a free 30-minute consultation to discuss your project in detail. No obligation.</p>
 
         <!-- PLACEHOLDER: Replace with your Calendly or Cal.com link -->
-        <a href="https://cal.com/aditya-vijay-vnaskz/client-talk" class="btn btn-secondary" target="_blank" rel="noopener noreferrer">
-          <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor">
-            <path fill-rule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clip-rule="evenodd"/>
-          </svg>
-          Book a Call
-        </a>
+        <a
+    href="#"
+    class="btn btn-secondary"
+    data-cal-link="aditya-vijay-vnaskz/client-talk"
+    data-cal-namespace="client-talk"
+    data-cal-config='{"layout":"month_view","useSlotsViewOnSmallScreen":"true"}'
+>
+    <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor">
+        <path fill-rule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1v1H6zM6 7a1 1 0 000 2h8a1 1 0 100-2H6z" clip-rule="evenodd"/>
+    </svg>
+
+    Book a Call
+</a>
       </div>
 
       <!-- Email Card -->
@@ -201,5 +208,69 @@
   </footer>
 
   <script src="js/main.js"></script>
+  <!-- Cal.com element-click embed -->
+<script type="text/javascript">
+  (function (C, A, L) {
+    let p = function (a, ar) {
+      a.q.push(ar);
+    };
+
+    let d = C.document;
+
+    C.Cal = C.Cal || function () {
+      let cal = C.Cal;
+      let ar = arguments;
+
+      if (!cal.loaded) {
+        cal.ns = {};
+        cal.q = cal.q || [];
+
+        d.head.appendChild(
+          d.createElement("script")
+        ).src = A;
+
+        cal.loaded = true;
+      }
+
+      if (ar[0] === L) {
+        const api = function () {
+          p(api, arguments);
+        };
+
+        const namespace = ar[1];
+
+        api.q = api.q || [];
+
+        if (typeof namespace === "string") {
+          cal.ns[namespace] = cal.ns[namespace] || api;
+          p(cal.ns[namespace], ar);
+          p(cal, ["initNamespace", namespace]);
+        } else {
+          p(cal, ar);
+        }
+
+        return;
+      }
+
+      p(cal, ar);
+    };
+  })(window, "https://app.cal.com/embed/embed.js", "init");
+
+  Cal("init", "client-talk", {
+    origin: "https://app.cal.com"
+  });
+
+  Cal.config = Cal.config || {};
+  Cal.config.forwardQueryParams = true;
+
+  Cal.ns["client-talk"](
+    "ui",
+    {
+      hideEventTypeDetails: false,
+      layout: "month_view"
+    }
+  );
+</script>
+<!-- Cal.com element-click embed ends -->
 </body>
 </html>
