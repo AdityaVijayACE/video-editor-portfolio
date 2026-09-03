@@ -10,7 +10,6 @@ document.addEventListener('DOMContentLoaded', () => {
   initScrollReveal();
   initProjectFilter();
   initSmoothScroll();
-  initFormValidation();
   initLazyLoading();
   initParallaxEffects();
 });
