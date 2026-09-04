@@ -24,7 +24,8 @@ function initCustomCursor() {
   if (!cursor || !follower) return;
 
   // Check if device supports hover (not touch)
-  if (window.matchMedia('(hover: hover)').matches) {
+    if (window.matchMedia('(hover: hover)').matches) {
+    document.body.classList.add('cursor-ready');
     let mouseX = 0, mouseY = 0;
     let cursorX = 0, cursorY = 0;
     let followerX = 0, followerY = 0;
