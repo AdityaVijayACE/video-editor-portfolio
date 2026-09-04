@@ -10,7 +10,6 @@ document.addEventListener('DOMContentLoaded', () => {
   initScrollReveal();
   initProjectFilter();
   initSmoothScroll();
-  initLazyLoading();
   initParallaxEffects();
 });
 
@@ -291,32 +290,7 @@ function showSuccessMessage(form) {
    LAZY LOADING
    ======================================== */
 
-function initLazyLoading() {
-  const lazyImages = document.querySelectorAll('img[data-src]');
 
-  if (lazyImages.length === 0) return;
-
-  const imageOptions = {
-    threshold: 0,
-    rootMargin: '50px 0px'
-  };
-
-  const imageObserver = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        const img = entry.target;
-        img.src = img.dataset.src;
-        img.removeAttribute('data-src');
-        img.classList.add('loaded');
-        imageObserver.unobserve(img);
-      }
-    });
-  }, imageOptions);
-
-  lazyImages.forEach(img => {
-    imageObserver.observe(img);
-  });
-}
 
 /* ========================================
    PARALLAX EFFECTS
@@ -342,43 +316,13 @@ function initParallaxEffects() {
    CLIENT LOGOS INFINITE SCROLL
    ======================================== */
 
-function initClientLogos() {
-  const track = document.querySelector('.clients-track');
 
-  if (!track) return;
-
-  // Duplicate logos for seamless loop
-  const logos = track.innerHTML;
-  track.innerHTML = logos + logos;
-
-  // Pause on hover
-  track.addEventListener('mouseenter', () => {
-    track.style.animationPlayState = 'paused';
-  });
-
-  track.addEventListener('mouseleave', () => {
-    track.style.animationPlayState = 'running';
-  });
-}
 
 /* ========================================
    VIDEO PLAYER ENHANCEMENT
    ======================================== */
 
-function initVideoPlayers() {
-  const videoContainers = document.querySelectorAll('.video-container');
 
-  videoContainers.forEach(container => {
-    const iframe = container.querySelector('iframe');
-
-    if (iframe) {
-      // Add loading state
-      iframe.addEventListener('load', () => {
-        container.classList.add('loaded');
-      });
-    }
-  });
-}
 
 /* ========================================
    UTILITIES
@@ -454,8 +398,19 @@ function initProjectPage() {
 const contactForm = document.getElementById("contact-form");
 
 if (contactForm) {
+  const emailInput = document.getElementById("email");
+
+  emailInput.addEventListener("input", () => clearError(emailInput));
+
   contactForm.addEventListener("submit", async function (e) {
     e.preventDefault();
+
+    if (!isValidEmail(emailInput.value)) {
+      showError(emailInput, "Please enter a valid email address.");
+      emailInput.focus();
+      return;
+    }
+    clearError(emailInput);
 
     const submitButton = contactForm.querySelector(".form-submit");
     const originalButtonHTML = submitButton.innerHTML;
@@ -465,28 +420,27 @@ if (contactForm) {
 
     const formData = {
       name: document.getElementById("name").value,
-      email: document.getElementById("email").value,
+      email: emailInput.value,
       company: document.getElementById("company").value,
       projectType: document.getElementById("project-type").value,
       subject: document.getElementById("subject").value,
       message: document.getElementById("message").value
     };
 
-    try {
+        try {
       const response = await fetch(
         "https://script.google.com/macros/s/AKfycbyzXQ30ILWQ3OeDxjfl-aub7rOnk0yaQufdPB0J75C40HPpbeSG84oEb22HgZaqo4ig/exec",
         {
           method: "POST",
-          mode: "no-cors",
-          headers: {
-            "Content-Type": "text/plain;charset=utf-8"
-          },
+          headers: { "Content-Type": "text/plain;charset=utf-8" },
           body: JSON.stringify(formData)
         }
       );
+      const result = await response.json();
+      if (result.result !== "success") throw new Error("Script returned failure");
 
       contactForm.reset();
-
+      showSuccessMessage(contactForm);
       submitButton.innerHTML = "Message Sent ✓";
 
       setTimeout(() => {
